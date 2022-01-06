@@ -1,18 +1,35 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <div v-if="result">{{ result }}</div>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import { useQuery } from "@vue/apollo-composable";
+import gql from "graphql-tag";
 
 export default defineComponent({
   name: "Home",
-  components: {
-    HelloWorld,
+  setup() {
+    const { result } = useQuery(gql`
+      query getCharacters {
+        characters(page: 1) {
+          info {
+            count
+          }
+          results {
+            id
+            name
+            image
+          }
+        }
+      }
+    `);
+
+    return {
+      result,
+    };
   },
 });
 </script>
