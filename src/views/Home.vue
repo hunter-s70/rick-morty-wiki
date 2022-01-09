@@ -1,11 +1,9 @@
 <template>
   <div class="home">
-    <div v-if="charactersList">
-      <div v-for="result in charactersList" :key="result.id">
-        <div class="tile">
-          <p class="tile__title">{{ result.name }}</p>
-          <img class="tile__img" :src="result.image" :alt="result.name" />
-        </div>
+    <div v-if="charactersList" class="home__characters">
+      <div v-for="result in charactersList" :key="result.id" class="tile">
+        <p class="tile__title">{{ result.name }}</p>
+        <img class="tile__img" :src="result.image" :alt="result.name" />
       </div>
     </div>
   </div>
@@ -52,6 +50,14 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+.home {
+  &__characters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
 .tile {
+  border: 1px solid black;
+  background-color: bisque;
 }
 </style>
