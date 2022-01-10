@@ -53,11 +53,28 @@ export default defineComponent({
 .home {
   &__characters {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px 15px;
   }
 }
 .tile {
+  font-weight: bold;
   border: 1px solid black;
-  background-color: bisque;
+  background-color: rgba(255, 228, 196, 1);
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 228, 196, 0.8);
+  }
+
+  &:nth-child(1),
+  &:nth-child(7) {
+    grid-column: 1 / span 2;
+  }
+
+  &:nth-child(6),
+  &:nth-child(12) {
+    grid-column: 3 / span 2;
+  }
 }
 </style>
