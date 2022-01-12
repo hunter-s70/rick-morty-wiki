@@ -53,10 +53,25 @@ export default defineComponent({
 .home {
   &__characters {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1fr;
     grid-gap: 15px 15px;
+    max-width: 2000px;
+    margin: auto;
+
+    @media (min-width: 992px) {
+      & {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1200px) {
+      & {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
   }
 }
+
 .tile {
   font-weight: bold;
   border: 1px solid black;
@@ -67,14 +82,16 @@ export default defineComponent({
     background-color: rgba(255, 228, 196, 0.8);
   }
 
-  &:nth-child(1),
-  &:nth-child(7) {
-    grid-column: 1 / span 2;
-  }
+  @media (min-width: 1200px) {
+    &:nth-child(1),
+    &:nth-child(7) {
+      grid-column: 1 / span 2;
+    }
 
-  &:nth-child(6),
-  &:nth-child(12) {
-    grid-column: 3 / span 2;
+    &:nth-child(6),
+    &:nth-child(12) {
+      grid-column: 3 / span 2;
+    }
   }
 }
 </style>
