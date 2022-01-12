@@ -51,6 +51,8 @@ export default defineComponent({
 
 <style lang="scss">
 .home {
+  padding: 10px;
+
   &__characters {
     display: grid;
     grid-template-columns: 1fr;
@@ -73,6 +75,7 @@ export default defineComponent({
 }
 
 .tile {
+  padding: 0 10px 15px;
   font-weight: bold;
   border: 1px solid black;
   background-color: rgba(255, 228, 196, 1);
@@ -80,6 +83,10 @@ export default defineComponent({
 
   &:hover {
     background-color: rgba(255, 228, 196, 0.8);
+  }
+
+  &__img {
+    vertical-align: top;
   }
 
   @media (min-width: 1200px) {
