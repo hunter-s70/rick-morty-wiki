@@ -1,3 +1,5 @@
+@import "~normalize.css/normalize.css";
+
 @media (min-width: 576px) {}
 
 @media (min-width: 768px) {}
