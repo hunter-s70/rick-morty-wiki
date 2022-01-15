@@ -11,6 +11,11 @@
 
 <script lang="ts">
 import { defineComponent, computed } from "vue";
+
+import { CharactersList } from "@/models/characters-list.model";
+import { Character } from "@/models/character.model";
+import { ListInfo } from "@/models/list-info.model";
+
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
@@ -33,7 +38,15 @@ export default defineComponent({
     `);
 
     const getData = computed((): { [key: string]: any } | null => {
-      return result.value?.characters || null;
+      const data = result.value?.characters;
+      const charactersInitialResult = data?.results || [];
+      const initialListInfo = data?.info || {};
+      const finalListInfo = new ListInfo(initialListInfo.count);
+      const finalCharactersList = charactersInitialResult.map((item: any) => {
+        return new Character(item.id, item.name, item.image);
+      });
+
+      return new CharactersList(finalListInfo, finalCharactersList);
     });
 
     return {

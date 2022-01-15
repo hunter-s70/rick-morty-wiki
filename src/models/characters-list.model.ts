@@ -3,15 +3,15 @@ import { IListInfo } from "@/models/list-info.model";
 
 export interface ICharactersList {
   info: IListInfo;
-  characters: ICharacter[];
+  results: ICharacter[];
 }
 
 export class CharactersList implements ICharactersList {
   info: IListInfo;
-  characters: ICharacter[];
+  results: ICharacter[];
 
-  constructor(info: IListInfo, characters: ICharacter[]) {
+  constructor(info: IListInfo, results: ICharacter[]) {
     this.info = info;
-    this.characters = characters;
+    this.results = results;
   }
 }
