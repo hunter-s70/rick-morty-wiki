@@ -27,6 +27,9 @@ export default defineComponent({
         characters(page: 1) {
           info {
             count
+            pages
+            next
+            prev
           }
           results {
             id
@@ -40,10 +43,15 @@ export default defineComponent({
     const getData = computed((): { [key: string]: any } | null => {
       const data = result.value?.characters;
       const charactersInitialResult = data?.results || [];
-      const initialListInfo = data?.info || {};
-      const finalListInfo = new ListInfo(initialListInfo.count);
+
+      // fill list info
+      const { count, pages, next, prev } = data?.info || {};
+      const finalListInfo = new ListInfo(count, pages, next, prev);
+
+      // fill list
       const finalCharactersList = charactersInitialResult.map((item: any) => {
-        return new Character(item.id, item.name, item.image);
+        const { id, name, image } = item || {};
+        return new Character(id, name, image);
       });
 
       return new CharactersList(finalListInfo, finalCharactersList);
