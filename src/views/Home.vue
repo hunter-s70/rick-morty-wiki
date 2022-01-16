@@ -1,44 +1,38 @@
 <template>
   <div class="home">
-    <div v-if="charactersList" class="home__characters">
+    <div
+      v-if="charactersList && charactersList.length"
+      class="home__characters"
+    >
       <div v-for="result in charactersList" :key="result.id" class="tile">
         <p class="tile__title">{{ result.name }}</p>
         <img class="tile__img" :src="result.image" :alt="result.name" />
       </div>
     </div>
+    <div class="home__buttons">
+      <button class="home__btn" @click="loadMore">Load more</button>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 
 import { CharactersList } from "@/models/characters-list.model";
 import { Character } from "@/models/character.model";
 import { ListInfo } from "@/models/list-info.model";
 
-import { useQuery } from "@vue/apollo-composable";
-import gql from "graphql-tag";
+import { getCharactersList } from "@/api/characters.requests";
+
+interface IHomeData {
+  charactersList: Character[];
+}
 
 export default defineComponent({
   name: "Home",
   setup() {
-    const { result } = useQuery(gql`
-      query getCharacters {
-        characters(page: 1) {
-          info {
-            count
-            pages
-            next
-            prev
-          }
-          results {
-            id
-            name
-            image
-          }
-        }
-      }
-    `);
+    const page = ref(1);
+    const { result } = getCharactersList(page);
 
     const getData = computed((): { [key: string]: any } | null => {
       const data = result.value?.characters;
@@ -59,12 +53,38 @@ export default defineComponent({
 
     return {
       result,
+      page,
       characters: getData,
     };
   },
+  data(): IHomeData {
+    return {
+      charactersList: [],
+    };
+  },
   computed: {
-    charactersList(): any {
+    charactersResult(): any {
       return this.characters?.results || null;
+    },
+    nextPage(): any {
+      return this.characters?.info.next || null;
+    },
+  },
+  watch: {
+    charactersResult(updatedList) {
+      this.updateListData(updatedList);
+    },
+  },
+  methods: {
+    loadMore(): void {
+      if (this.nextPage) {
+        this.page = this.nextPage;
+      }
+    },
+    updateListData(listData: Character[]): void {
+      if (listData && listData.length) {
+        this.charactersList = [...this.charactersList, ...listData];
+      }
     },
   },
 });
@@ -92,6 +112,14 @@ export default defineComponent({
         grid-template-columns: repeat(4, 1fr);
       }
     }
+  }
+
+  &__buttons {
+    padding: 20px 0;
+  }
+
+  &__btn {
+    cursor: pointer;
   }
 }
 

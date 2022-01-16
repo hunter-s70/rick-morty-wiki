@@ -1,7 +1,8 @@
+import { Ref } from "vue";
 import { useQuery } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
-export function getCharactersList(page: number) {
+export function getCharactersList(page: Ref) {
   return useQuery(
     gql`
       query getCharacters($page: Int!) {
