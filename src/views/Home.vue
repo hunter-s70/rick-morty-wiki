@@ -18,8 +18,11 @@
 <script lang="ts">
 import { defineComponent, computed, ref } from "vue";
 
-import { CharactersList } from "@/models/characters-list.model";
-import { Character } from "@/models/character.model";
+import {
+  CharactersList,
+  ICharactersList,
+} from "@/models/characters-list.model";
+import { Character, ICharacter } from "@/models/character.model";
 import { ListInfo } from "@/models/list-info.model";
 
 import { getCharactersList } from "@/api/characters.requests";
@@ -34,7 +37,7 @@ export default defineComponent({
     const page = ref(1);
     const { result } = getCharactersList(page);
 
-    const getData = computed((): { [key: string]: any } | null => {
+    const getData = computed((): ICharactersList => {
       const data = result.value?.characters;
       const charactersInitialResult = data?.results || [];
 
@@ -63,11 +66,11 @@ export default defineComponent({
     };
   },
   computed: {
-    charactersResult(): any {
-      return this.characters?.results || null;
+    charactersResult(): ICharacter[] {
+      return this.characters.results;
     },
-    nextPage(): any {
-      return this.characters?.info.next || null;
+    nextPage(): number | null {
+      return this.characters.info.next || null;
     },
   },
   watch: {
