@@ -26,3 +26,25 @@ export function getCharactersList(
     { page }
   );
 }
+
+export function getCharacterInfo(
+  id: Ref<number>
+): UseQueryReturn<{ [key: string]: any }, { id: Ref<number> }> {
+  return useQuery(
+    gql`
+      query getCharacters($id: ID!) {
+        character(id: $id) {
+          id
+          name
+          gender
+          type
+          status
+          image
+          species
+          created
+        }
+      }
+    `,
+    { id }
+  );
+}
