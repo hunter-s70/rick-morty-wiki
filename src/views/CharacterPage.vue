@@ -14,6 +14,10 @@
       <span class="character__info-title">Species:</span>
       <span>{{ character.species }}</span>
     </p>
+    <p v-if="character.type" class="character__info">
+      <span class="character__info-title">Type:</span>
+      <span>{{ character.type }}</span>
+    </p>
   </div>
 </template>
 
