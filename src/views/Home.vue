@@ -27,7 +27,7 @@ import {
   CharactersList,
   ICharactersList,
 } from "@/models/characters-list.model";
-import { Character, ICharacter } from "@/models/character.model";
+import { Character, ICharacterPreview } from "@/models/character.model";
 import { ListInfo } from "@/models/list-info.model";
 
 import { getCharactersList } from "@/api/characters.requests";
@@ -71,7 +71,7 @@ export default defineComponent({
     };
   },
   computed: {
-    charactersResult(): ICharacter[] {
+    charactersResult(): ICharacterPreview[] {
       return this.characters.results;
     },
     nextPage(): number | null {

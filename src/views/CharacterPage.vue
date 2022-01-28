@@ -1,14 +1,27 @@
 <template>
-  <div class="character">
-    <h1>Character info will be here. id: {{ $route.params.id }}</h1>
-    <p>{{ result }}</p>
+  <div v-if="character" class="character">
+    <h1>{{ character.name }}</h1>
+    <img :src="character.image" :alt="character.name" />
+    <p class="character__info">
+      <span class="character__info-title">Gender:</span>
+      <span>{{ character.gender }}</span>
+    </p>
+    <p class="character__info">
+      <span class="character__info-title">Status:</span>
+      <span>{{ character.status }}</span>
+    </p>
+    <p class="character__info">
+      <span class="character__info-title">Species:</span>
+      <span>{{ character.species }}</span>
+    </p>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { computed, defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { getCharacterInfo } from "@/api/characters.requests";
+import { ICharacter } from "@/models/character.model";
 
 export default defineComponent({
   name: "CharactersPage",
@@ -18,9 +31,24 @@ export default defineComponent({
     const id = route.params.id;
     const { result } = getCharacterInfo(id);
 
+    const getData = computed((): ICharacter => {
+      return result.value?.character;
+    });
+
     return {
       result,
+      character: getData,
     };
   },
 });
 </script>
+
+<style lang="scss">
+.character {
+  &__info {
+    &-title {
+      padding-right: 10px;
+    }
+  }
+}
+</style>
