@@ -4,10 +4,15 @@
       v-if="charactersList && charactersList.length"
       class="home__characters"
     >
-      <div v-for="result in charactersList" :key="result.id" class="tile">
+      <router-link
+        v-for="result in charactersList"
+        :key="result.id"
+        :to="`/characters/${result.id}`"
+        class="tile"
+      >
         <p class="tile__title">{{ result.name }}</p>
         <img class="tile__img" :src="result.image" :alt="result.name" />
-      </div>
+      </router-link>
     </div>
     <div class="home__buttons">
       <button class="home__btn" @click="loadMore">Load more</button>
@@ -22,7 +27,7 @@ import {
   CharactersList,
   ICharactersList,
 } from "@/models/characters-list.model";
-import { Character, ICharacter } from "@/models/character.model";
+import { Character, ICharacterPreview } from "@/models/character.model";
 import { ListInfo } from "@/models/list-info.model";
 
 import { getCharactersList } from "@/api/characters.requests";
@@ -66,7 +71,7 @@ export default defineComponent({
     };
   },
   computed: {
-    charactersResult(): ICharacter[] {
+    charactersResult(): ICharacterPreview[] {
       return this.characters.results;
     },
     nextPage(): number | null {
@@ -128,13 +133,15 @@ export default defineComponent({
 
 .tile {
   padding: 0 10px 15px;
+  color: #000;
+  text-decoration: none;
   font-weight: bold;
   border: 1px solid black;
   background-color: rgba(255, 228, 196, 1);
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(255, 228, 196, 0.8);
+    opacity: 0.7;
   }
 
   &__img {
