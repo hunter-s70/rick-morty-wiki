@@ -28,8 +28,8 @@ export function getCharactersList(
 }
 
 export function getCharacterInfo(
-  id: Ref<number>
-): UseQueryReturn<{ [key: string]: any }, { id: Ref<number> }> {
+  id: string | string[]
+): UseQueryReturn<{ [key: string]: any }, { id: string | string[] }> {
   return useQuery(
     gql`
       query getCharacters($id: ID!) {
