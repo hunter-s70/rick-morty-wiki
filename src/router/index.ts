@@ -27,6 +27,9 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  scrollBehavior(_to, _from, _savedPosition) {
+    return { x: 0, y: 0 } as any;
+  },
 });
 
 export default router;
