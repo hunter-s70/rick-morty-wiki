@@ -33,7 +33,7 @@ import { ListInfo } from "@/models/list-info.model";
 import { getCharactersList } from "@/api/characters.requests";
 
 interface IHomeData {
-  charactersList: Character[];
+  savedList: Character[];
 }
 
 export default defineComponent({
@@ -67,31 +67,33 @@ export default defineComponent({
   },
   data(): IHomeData {
     return {
-      charactersList: [],
+      savedList: [],
     };
   },
   computed: {
-    charactersResult(): ICharacterPreview[] {
+    currentPageList(): ICharacterPreview[] {
       return this.characters.results;
+    },
+    charactersList(): ICharacterPreview[] {
+      return [...this.savedList, ...this.currentPageList];
     },
     nextPage(): number | null {
       return this.characters.info.next || null;
     },
   },
-  watch: {
-    charactersResult(updatedList) {
-      this.updateListData(updatedList);
-    },
-  },
   methods: {
     loadMore(): void {
+      this.savePageData(this.currentPageList);
+      this.changePage();
+    },
+    changePage(): void {
       if (this.nextPage) {
         this.page = this.nextPage;
       }
     },
-    updateListData(listData: Character[]): void {
+    savePageData(listData: Character[]): void {
       if (listData && listData.length) {
-        this.charactersList = [...this.charactersList, ...listData];
+        this.savedList = [...this.savedList, ...listData];
       }
     },
   },
