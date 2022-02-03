@@ -32,7 +32,7 @@ export function getCharacterInfo(
 ): UseQueryReturn<{ [key: string]: any }, { id: string | string[] }> {
   return useQuery(
     gql`
-      query getCharacters($id: ID!) {
+      query getCharacter($id: ID!) {
         character(id: $id) {
           id
           name
