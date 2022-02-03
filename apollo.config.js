@@ -4,7 +4,7 @@ module.exports = {
     service: {
       name: "rickandmortyapi",
       url: "https://rickandmortyapi.com/graphql",
-      // localSchemaFile: "./introspectionSchema.json",
+      // localSchemaFile: "./schema.json",
     },
   },
 };
