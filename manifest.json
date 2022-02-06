@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "operations": [
+    {
+      "signature": "4df6568e96b740f4b49d21bd1e737bcf8e5c5385308de2e0631b156bf05b04a1",
+      "document": "query getCharacters($page:Int!){characters(page:$page){info{count next pages prev}results{id image name}}}",
+      "metadata": {
+        "engineSignature": ""
+      }
+    },
+    {
+      "signature": "3a48568ccb754f9088f6f082df172ddb3539348621cb5a30d69cd250658b988a",
+      "document": "query getCharacter($id:ID!){character(id:$id){gender id image name species status type}}",
+      "metadata": {
+        "engineSignature": ""
+      }
+    }
+  ]
+}

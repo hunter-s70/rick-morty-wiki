@@ -58,3 +58,8 @@ npx apollo client:codegen --target=typescript
 ```
 npx apollo client:download-schema schema.gql
 ```
+
+### Generate manifest.json 
+```
+npx apollo client:extract
+```
