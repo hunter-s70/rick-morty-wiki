@@ -3,11 +3,13 @@ import { useQuery, UseQueryReturn } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
 export const paginationInfoFragment = gql`
-  fragment paginationInfo on Info {
-    count
-    pages
-    next
-    prev
+  fragment paginationInfo on Characters {
+    info {
+      count
+      pages
+      next
+      prev
+    }
   }
 `;
 
@@ -26,9 +28,7 @@ export function getCharactersList(
     gql`
       query getCharacters($page: Int!) {
         characters(page: $page) {
-          info {
-            ...paginationInfo
-          }
+          ...paginationInfo
           results {
             ...characterPreview
           }
