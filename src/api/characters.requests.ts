@@ -2,6 +2,23 @@ import { Ref } from "vue";
 import { useQuery, UseQueryReturn } from "@vue/apollo-composable";
 import gql from "graphql-tag";
 
+export const paginationInfoFragment = gql`
+  fragment paginationInfo on Info {
+    count
+    pages
+    next
+    prev
+  }
+`;
+
+export const characterPreviewFragment = gql`
+  fragment characterPreview on Character {
+    id
+    name
+    image
+  }
+`;
+
 export function getCharactersList(
   page: Ref<number>
 ): UseQueryReturn<{ [key: string]: any }, { page: Ref<number> }> {
@@ -10,18 +27,15 @@ export function getCharactersList(
       query getCharacters($page: Int!) {
         characters(page: $page) {
           info {
-            count
-            pages
-            next
-            prev
+            ...paginationInfo
           }
           results {
-            id
-            name
-            image
+            ...characterPreview
           }
         }
       }
+      ${paginationInfoFragment}
+      ${characterPreviewFragment}
     `,
     { page }
   );
@@ -34,16 +48,15 @@ export function getCharacterInfo(
     gql`
       query getCharacter($id: ID!) {
         character(id: $id) {
-          id
-          name
+          ...characterPreview
           gender
           type
           status
-          image
           species
           created
         }
       }
+      ${characterPreviewFragment}
     `,
     { id }
   );
