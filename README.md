@@ -25,10 +25,11 @@ npm run test:e2e
 npm run lint
 ```
 
-### Install apollo CLI globally
+### Install apollo CLI 
 ```
 npm install -g apollo
 ```
+Install it locally or globally in case of `graphql` version errors
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
@@ -42,10 +43,18 @@ See [CLI](https://www.apollographql.com/docs/devtools/cli/)
 See [API](https://rickandmortyapi.com/documentation/#graphql)
 Source code [GitHub](https://github.com/afuh/rick-and-morty-api)
 
-## Useful apollo commands:
+## Useful apollo commands
 ```
 npx apollo help client // help
 npx apollo help client:<command name> // help for specific comand
-npx apollo help client:download-schema // load schema from server
-npx apollo client:codegen --target=typescript // gerenate types for queries
+```
+
+### Generate types
+```
+npx apollo client:codegen --target=typescript
+```
+
+### Get schema from gql service
+```
+npx apollo client:download-schema schema.gql
 ```
