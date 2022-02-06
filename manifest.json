@@ -2,15 +2,15 @@
   "version": 2,
   "operations": [
     {
-      "signature": "4df6568e96b740f4b49d21bd1e737bcf8e5c5385308de2e0631b156bf05b04a1",
-      "document": "query getCharacters($page:Int!){characters(page:$page){info{count next pages prev}results{id image name}}}",
+      "signature": "bbde7e8991e561c90463532ad88d966e25cda38124374744973674ca49eab49b",
+      "document": "fragment characterPreview on Character{id image name}fragment paginationInfo on Characters{info{count next pages prev}}query getCharacters($page:Int!){characters(page:$page){results{...characterPreview}...paginationInfo}}",
       "metadata": {
         "engineSignature": ""
       }
     },
     {
-      "signature": "3a48568ccb754f9088f6f082df172ddb3539348621cb5a30d69cd250658b988a",
-      "document": "query getCharacter($id:ID!){character(id:$id){gender id image name species status type}}",
+      "signature": "4ec00fc46325ad98cbbc95d58270e3b643840974d43c89c8021053a8c7aac078",
+      "document": "fragment characterPreview on Character{id image name}query getCharacter($id:ID!){character(id:$id){created gender species status type...characterPreview}}",
       "metadata": {
         "engineSignature": ""
       }
