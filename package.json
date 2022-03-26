@@ -6,7 +6,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:e2e": "vue-cli-service test:e2e",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "gql:extract": "npx apollo client:extract",
+    "gql:codegen": "npx apollo client:codegen --target=typescript",
+    "gql:schema:json": "npx apollo client:download-schema schema.json",
+    "gql:schema:gql": "npx apollo client:download-schema schema.gql",
+    "gql:generate": "npm run gql:schema:json && npm run gql:schema:gql && npm run gql:codegen && npm run gql:extract"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",
