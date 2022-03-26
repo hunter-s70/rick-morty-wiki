@@ -22,10 +22,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from "vue";
+import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
+import { useResult } from "@vue/apollo-composable";
 import { getCharacterInfo } from "@/api/characters.requests";
-import { ICharacter } from "@/models/character.model";
 
 export default defineComponent({
   name: "CharactersPage",
@@ -34,14 +34,10 @@ export default defineComponent({
 
     const id = route.params.id;
     const { result } = getCharacterInfo(id);
-
-    const getData = computed((): ICharacter => {
-      return result.value?.character;
-    });
+    const character = useResult(result);
 
     return {
-      result,
-      character: getData,
+      character,
     };
   },
 });
