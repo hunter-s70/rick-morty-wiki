@@ -1,6 +1,7 @@
 <template>
   <div v-if="character" class="character">
     <h1>{{ character.name }}</h1>
+
     <img :src="character.image" :alt="character.name" />
     <p class="character__info">
       <span class="character__info-title">Gender:</span>
@@ -18,6 +19,30 @@
       <span class="character__info-title">Type:</span>
       <span>{{ character.type }}</span>
     </p>
+
+    <div v-if="character.origin && character.origin.type">
+      <h2>Origin</h2>
+
+      <p class="character__info">
+        <span class="character__info-title">{{ character.origin.type }}:</span>
+        <span>{{ character.origin.name }}</span>
+      </p>
+      <p class="character__info">
+        <span class="character__info-title">Dimension:</span>
+        <span>{{ character.origin.dimension }}</span>
+      </p>
+    </div>
+
+    <div v-if="character.location && character.location.type">
+      <h2>Location</h2>
+
+      <p class="character__info">
+        <span class="character__info-title"
+          >{{ character.location.type }}:</span
+        >
+        <span>{{ character.location.name }}</span>
+      </p>
+    </div>
   </div>
 </template>
 
