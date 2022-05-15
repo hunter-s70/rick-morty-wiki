@@ -101,25 +101,34 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+$tile-width: 360px;
+
 .home {
   padding: 10px;
 
   &__characters {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: $tile-width;
     grid-gap: 15px 15px;
+    justify-content: center;
     max-width: 2000px;
     margin: auto;
 
-    @media (min-width: 992px) {
+    @media (min-width: 768px) {
       & {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, $tile-width);
       }
     }
 
     @media (min-width: 1200px) {
       & {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, $tile-width);
+      }
+    }
+
+    @media (min-width: 1400px) {
+      & {
+        grid-template-columns: repeat(4, $tile-width);
       }
     }
   }
@@ -135,22 +144,28 @@ export default defineComponent({
 
 .tile {
   padding: 0 10px 15px;
-  color: #000;
+  color: #2c3e50;
   text-decoration: none;
   font-weight: bold;
-  border: 1px solid black;
-  background-color: rgba(255, 228, 196, 1);
+  border: 2px solid #dbdbdb;
+  border-radius: 4px;
+  background-color: rgba(237, 247, 243, 1);
   cursor: pointer;
 
   &:hover {
-    opacity: 0.7;
+    border-color: #2c3e50;
+  }
+
+  &__title {
+    margin: 10px auto;
+    font-size: 20px;
   }
 
   &__img {
     vertical-align: top;
   }
 
-  @media (min-width: 1200px) {
+  @media (min-width: 1400px) {
     &:nth-child(1),
     &:nth-child(7) {
       grid-column: 1 / span 2;
