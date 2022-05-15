@@ -20,7 +20,10 @@
       <span>{{ character.type }}</span>
     </p>
 
-    <div v-if="character.origin && character.origin.type">
+    <div
+      v-if="character.origin && character.origin.type"
+      class="character__info-block"
+    >
       <h2>Origin</h2>
 
       <p class="character__info">
@@ -33,7 +36,10 @@
       </p>
     </div>
 
-    <div v-if="character.location && character.location.type">
+    <div
+      v-if="character.location && character.location.type"
+      class="character__info-block"
+    >
       <h2>Location</h2>
 
       <p class="character__info">
@@ -41,6 +47,20 @@
           >{{ character.location.type }}:</span
         >
         <span>{{ character.location.name }}</span>
+      </p>
+    </div>
+
+    <div v-if="character.episode" class="character__info-block episodes">
+      <h2 class="episodes__title">Episodes</h2>
+
+      <p
+        v-for="episode in character.episode"
+        :key="episode.id"
+        class="episodes__episode"
+      >
+        <span class="episodes__episode-title">{{ episode.name }}</span>
+        <span class="episodes__episode-separator"></span>
+        <span class="episodes__episode-number">{{ episode.episode }}</span>
       </p>
     </div>
   </div>
@@ -70,9 +90,47 @@ export default defineComponent({
 
 <style lang="scss">
 .character {
+  &__info-block {
+    margin-top: 25px;
+  }
+
   &__info {
     &-title {
+      font-weight: bold;
       padding-right: 10px;
+    }
+  }
+}
+
+.episodes {
+  margin-top: 45px;
+  padding: 0 15px 20px;
+  text-align: left;
+
+  @media (min-width: 992px) {
+    & {
+      padding: 0 45px 60px;
+    }
+  }
+
+  &__title {
+    text-align: center;
+  }
+
+  &__episode {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 30px;
+    align-items: baseline;
+    column-gap: 10px;
+
+    &-title {
+      font-weight: bold;
+    }
+
+    &-separator {
+      display: inline-block;
+      border-bottom: 2px dotted;
     }
   }
 }
