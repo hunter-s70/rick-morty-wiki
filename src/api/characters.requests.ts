@@ -21,6 +21,25 @@ export const characterPreviewFragment = gql`
   }
 `;
 
+export const locationInfoFragment = gql`
+  fragment locationFragment on Location {
+    id
+    name
+    type
+    dimension
+    created
+  }
+`;
+
+export const episodeInfoFragment = gql`
+  fragment episodeFragment on Episode {
+    id
+    name
+    episode
+    created
+  }
+`;
+
 export function getCharactersList(
   page: Ref<number>
 ): UseQueryReturn<{ [key: string]: any }, { page: Ref<number> }> {
@@ -54,9 +73,20 @@ export function getCharacterInfo(
           status
           species
           created
+          origin {
+            ...locationFragment
+          }
+          location {
+            ...locationFragment
+          }
+          episode {
+            ...episodeFragment
+          }
         }
       }
       ${characterPreviewFragment}
+      ${locationInfoFragment}
+      ${episodeInfoFragment}
     `,
     { id }
   );

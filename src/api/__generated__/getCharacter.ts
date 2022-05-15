@@ -7,6 +7,74 @@
 // GraphQL query operation: getCharacter
 // ====================================================
 
+export interface getCharacter_character_origin {
+  __typename: "Location";
+  /**
+   * The id of the location.
+   */
+  id: string | null;
+  /**
+   * The name of the location.
+   */
+  name: string | null;
+  /**
+   * The type of the location.
+   */
+  type: string | null;
+  /**
+   * The dimension in which the location is located.
+   */
+  dimension: string | null;
+  /**
+   * Time at which the location was created in the database.
+   */
+  created: string | null;
+}
+
+export interface getCharacter_character_location {
+  __typename: "Location";
+  /**
+   * The id of the location.
+   */
+  id: string | null;
+  /**
+   * The name of the location.
+   */
+  name: string | null;
+  /**
+   * The type of the location.
+   */
+  type: string | null;
+  /**
+   * The dimension in which the location is located.
+   */
+  dimension: string | null;
+  /**
+   * Time at which the location was created in the database.
+   */
+  created: string | null;
+}
+
+export interface getCharacter_character_episode {
+  __typename: "Episode";
+  /**
+   * The id of the episode.
+   */
+  id: string | null;
+  /**
+   * The name of the episode.
+   */
+  name: string | null;
+  /**
+   * The code of the episode.
+   */
+  episode: string | null;
+  /**
+   * Time at which the episode was created in the database.
+   */
+  created: string | null;
+}
+
 export interface getCharacter_character {
   __typename: "Character";
   /**
@@ -42,6 +110,18 @@ export interface getCharacter_character {
    * Time at which the character was created in the database.
    */
   created: string | null;
+  /**
+   * The character's origin location
+   */
+  origin: getCharacter_character_origin | null;
+  /**
+   * The character's last known location
+   */
+  location: getCharacter_character_location | null;
+  /**
+   * Episodes in which this character appeared.
+   */
+  episode: (getCharacter_character_episode | null)[];
 }
 
 export interface getCharacter {
