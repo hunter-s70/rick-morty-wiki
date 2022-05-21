@@ -30,7 +30,8 @@ import {
 import { Character, ICharacterPreview } from "@/models/character.model";
 import { ListInfo } from "@/models/list-info.model";
 
-import { getCharactersList } from "@/api/characters.requests";
+import { getCharactersList } from "@/api/characters.gql";
+import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
 
 interface IHomeData {
   savedList: Character[];
@@ -47,14 +48,21 @@ export default defineComponent({
       const charactersInitialResult = data?.results || [];
 
       // fill list info
-      const { count, pages, next, prev } = data?.info || {};
+      const {
+        count = null,
+        pages = null,
+        next = null,
+        prev = null,
+      } = data?.info || {};
       const finalListInfo = new ListInfo(count, pages, next, prev);
 
       // fill list
-      const finalCharactersList = charactersInitialResult.map((item: any) => {
-        const { id, name, image } = item || {};
-        return new Character(id, name, image);
-      });
+      const finalCharactersList = charactersInitialResult.map(
+        (item: getCharacters_characters_results | null): ICharacterPreview => {
+          const { id = null, name = null, image = null } = item || {};
+          return new Character(id, name, image);
+        }
+      );
 
       return new CharactersList(finalListInfo, finalCharactersList);
     });

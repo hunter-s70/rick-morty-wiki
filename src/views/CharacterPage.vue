@@ -70,7 +70,7 @@
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 import { useResult } from "@vue/apollo-composable";
-import { getCharacterInfo } from "@/api/characters.requests";
+import { getCharacterInfo } from "@/api/characters.gql";
 
 export default defineComponent({
   name: "CharactersPage",

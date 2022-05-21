@@ -27,6 +27,7 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   scrollBehavior(_to, _from, _savedPosition) {
     return { left: 0, top: 0 };
   },
