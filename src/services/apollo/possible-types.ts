@@ -10,7 +10,6 @@ import { PossibleTypesMap } from "@apollo/client/core";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function getPossibleTypes(data: any): PossibleTypesMap {
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   const possibleTypes: PossibleTypesMap = {};
 
   data.__schema.types.forEach((supertype: IntrospectionInterfaceType) => {

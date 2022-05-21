@@ -30,7 +30,7 @@ import {
 import { Character, ICharacterPreview } from "@/models/character.model";
 import { ListInfo } from "@/models/list-info.model";
 
-import { getCharactersList } from "@/api/characters.requests";
+import { getCharactersList } from "@/api/characters.gql";
 import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
 
 interface IHomeData {
