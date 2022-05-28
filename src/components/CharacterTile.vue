@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { PropType } from "vue";
+import { defineComponent, PropType } from "vue";
 import { characterPreview } from "@/api/__generated__/characterPreview";
 
 export default defineComponent({
@@ -26,12 +25,6 @@ export default defineComponent({
       type: String,
       default: "",
     },
-  },
-
-  data() {
-    return {
-      savedList: [],
-    };
   },
 });
 </script>
