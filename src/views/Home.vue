@@ -4,16 +4,15 @@
       v-if="charactersList && charactersList.length"
       class="home__characters"
     >
-      <router-link
-        v-for="result in charactersList"
-        :key="result.id"
-        :to="`/characters/${result.id}`"
-        class="tile"
-      >
-        <p class="tile__title">{{ result.name }}</p>
-        <img class="tile__img" :src="result.image" :alt="result.name" />
-      </router-link>
+      <CharacterTile
+        v-for="character in charactersList"
+        :reference="`/characters/${character.id}`"
+        :key="character.id"
+        :item="character"
+        class="home__tile"
+      />
     </div>
+
     <div class="home__buttons">
       <button class="home__btn" @click="loadMore">Load more</button>
     </div>
@@ -32,6 +31,7 @@ import { ListInfo } from "@/models/list-info.model";
 
 import { getCharactersList } from "@/api/characters.gql";
 import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
+import CharacterTile from "@/components/CharacterTile.vue";
 
 interface IHomeData {
   savedList: Character[];
@@ -39,6 +39,9 @@ interface IHomeData {
 
 export default defineComponent({
   name: "Home",
+  components: {
+    CharacterTile,
+  },
   setup() {
     const page = ref(1);
     const { result } = getCharactersList(page);
@@ -141,48 +144,26 @@ $tile-width: 360px;
     }
   }
 
+  &__tile {
+    @media (min-width: 1400px) {
+      &:nth-child(1),
+      &:nth-child(7) {
+        grid-column: 1 / span 2;
+      }
+
+      &:nth-child(6),
+      &:nth-child(12) {
+        grid-column: 3 / span 2;
+      }
+    }
+  }
+
   &__buttons {
     padding: 20px 0;
   }
 
   &__btn {
     cursor: pointer;
-  }
-}
-
-.tile {
-  padding: 0 10px 15px;
-  color: #2c3e50;
-  text-decoration: none;
-  font-weight: bold;
-  border: 2px solid #dbdbdb;
-  border-radius: 4px;
-  background-color: rgba(237, 247, 243, 1);
-  cursor: pointer;
-
-  &:hover {
-    border-color: #2c3e50;
-  }
-
-  &__title {
-    margin: 10px auto;
-    font-size: 20px;
-  }
-
-  &__img {
-    vertical-align: top;
-  }
-
-  @media (min-width: 1400px) {
-    &:nth-child(1),
-    &:nth-child(7) {
-      grid-column: 1 / span 2;
-    }
-
-    &:nth-child(6),
-    &:nth-child(12) {
-      grid-column: 3 / span 2;
-    }
   }
 }
 </style>
