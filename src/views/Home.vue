@@ -1,8 +1,8 @@
 <template>
   <div class="home">
-    <div v-if="charactersList.length" class="home__characters">
+    <div v-if="resultList.length" class="home__characters">
       <CharacterTile
-        v-for="character in charactersList"
+        v-for="character in resultList"
         :reference="`/characters/${character.id}`"
         :key="character.id"
         :item="character"
@@ -19,6 +19,7 @@ import { defineComponent, computed } from "vue";
 import { useResult } from "@vue/apollo-composable";
 import { usePagination } from "@/composables/usePagination";
 import { useListContent } from "@/composables/useListContent";
+import { usePaginationList } from "@/composables/usePaginationList";
 
 import { getCharactersList } from "@/api/characters.gql";
 import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
@@ -27,10 +28,6 @@ import CharacterTile from "@/components/CharacterTile.vue";
 import LoadMore from "@/components/LoadMore.vue";
 
 type CharactersList = (getCharacters_characters_results | null)[];
-
-interface IHomeData {
-  savedList: CharactersList;
-}
 
 export default defineComponent({
   name: "Home",
@@ -43,34 +40,20 @@ export default defineComponent({
 
     const { list, info } = useListContent<CharactersList>(data);
     const { page, pages, nextPage } = usePagination(info);
+    const { resultList, loadMore } = usePaginationList<CharactersList>(
+      list,
+      nextPage
+    );
+
     const { result } = getCharactersList(page);
     const characters = useResult(result);
 
     return {
       page,
       pages,
-      nextPage,
-      list,
+      resultList,
+      loadMore,
     };
-  },
-  data(): IHomeData {
-    return {
-      savedList: [],
-    };
-  },
-  computed: {
-    charactersList(): CharactersList {
-      return [...this.savedList, ...this.list];
-    },
-  },
-  methods: {
-    loadMore(): void {
-      this.savePageData(this.list);
-      this.nextPage();
-    },
-    savePageData(listData: CharactersList): void {
-      this.savedList = [...this.savedList, ...listData];
-    },
   },
 });
 </script>
