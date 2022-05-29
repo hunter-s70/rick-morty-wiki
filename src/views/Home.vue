@@ -1,9 +1,6 @@
 <template>
   <div class="home">
-    <div
-      v-if="charactersList && charactersList.length"
-      class="home__characters"
-    >
+    <div v-if="charactersList.length" class="home__characters">
       <CharacterTile
         v-for="character in charactersList"
         :reference="`/characters/${character.id}`"
@@ -21,6 +18,7 @@
 import { defineComponent, computed } from "vue";
 import { useResult } from "@vue/apollo-composable";
 import { usePagination } from "@/composables/usePagination";
+import { useListContent } from "@/composables/useListContent";
 
 import { getCharactersList } from "@/api/characters.gql";
 import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
@@ -41,16 +39,15 @@ export default defineComponent({
     LoadMore,
   },
   setup() {
-    const list = computed(() => characters.value?.results);
-    const info = computed(() => characters.value?.info || null);
+    const data = computed(() => characters.value || null);
 
-    const { page, pages, next, nextPage } = usePagination(info);
+    const { list, info } = useListContent<CharactersList>(data);
+    const { page, pages, nextPage } = usePagination(info);
     const { result } = getCharactersList(page);
     const characters = useResult(result);
 
     return {
       page,
-      next,
       pages,
       nextPage,
       list,
@@ -62,22 +59,17 @@ export default defineComponent({
     };
   },
   computed: {
-    currentPageList(): CharactersList {
-      return this.list || [];
-    },
     charactersList(): CharactersList {
-      return [...this.savedList, ...this.currentPageList];
+      return [...this.savedList, ...this.list];
     },
   },
   methods: {
     loadMore(): void {
-      this.savePageData(this.currentPageList);
+      this.savePageData(this.list);
       this.nextPage();
     },
     savePageData(listData: CharactersList): void {
-      if (listData && listData.length) {
-        this.savedList = [...this.savedList, ...listData];
-      }
+      this.savedList = [...this.savedList, ...listData];
     },
   },
 });
