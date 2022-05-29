@@ -1,11 +1,8 @@
 <template>
   <div class="home">
-    <div
-      v-if="charactersList && charactersList.length"
-      class="home__characters"
-    >
+    <div v-if="resultList.length" class="home__characters">
       <CharacterTile
-        v-for="character in charactersList"
+        v-for="character in resultList"
         :reference="`/characters/${character.id}`"
         :key="character.id"
         :item="character"
@@ -13,100 +10,50 @@
       />
     </div>
 
-    <div class="home__buttons">
-      <button class="home__btn" @click="loadMore">Load more</button>
-    </div>
+    <LoadMore v-if="pages" :page="page" :pages="pages" @click="loadMore" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
-
-import {
-  CharactersList,
-  ICharactersList,
-} from "@/models/characters-list.model";
-import { Character, ICharacterPreview } from "@/models/character.model";
-import { ListInfo } from "@/models/list-info.model";
+import { defineComponent, computed } from "vue";
+import { useResult } from "@vue/apollo-composable";
+import { usePagination } from "@/composables/usePagination";
+import { useListContent } from "@/composables/useListContent";
+import { usePaginationList } from "@/composables/usePaginationList";
 
 import { getCharactersList } from "@/api/characters.gql";
 import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
-import CharacterTile from "@/components/CharacterTile.vue";
 
-interface IHomeData {
-  savedList: Character[];
-}
+import CharacterTile from "@/components/CharacterTile.vue";
+import LoadMore from "@/components/LoadMore.vue";
+
+type CharactersList = (getCharacters_characters_results | null)[];
 
 export default defineComponent({
   name: "Home",
   components: {
     CharacterTile,
+    LoadMore,
   },
   setup() {
-    const page = ref(1);
+    const data = computed(() => characters.value || null);
+
+    const { list, info } = useListContent<CharactersList>(data);
+    const { page, pages, nextPage } = usePagination(info);
+    const { resultList, loadMore } = usePaginationList<CharactersList>(
+      list,
+      nextPage
+    );
+
     const { result } = getCharactersList(page);
-
-    const getData = computed((): ICharactersList => {
-      const data = result.value?.characters;
-      const charactersInitialResult = data?.results || [];
-
-      // fill list info
-      const {
-        count = null,
-        pages = null,
-        next = null,
-        prev = null,
-      } = data?.info || {};
-      const finalListInfo = new ListInfo(count, pages, next, prev);
-
-      // fill list
-      const finalCharactersList = charactersInitialResult.map(
-        (item: getCharacters_characters_results | null): ICharacterPreview => {
-          const { id = null, name = null, image = null } = item || {};
-          return new Character(id, name, image);
-        }
-      );
-
-      return new CharactersList(finalListInfo, finalCharactersList);
-    });
+    const characters = useResult(result);
 
     return {
-      result,
       page,
-      characters: getData,
+      pages,
+      resultList,
+      loadMore,
     };
-  },
-  data(): IHomeData {
-    return {
-      savedList: [],
-    };
-  },
-  computed: {
-    currentPageList(): ICharacterPreview[] {
-      return this.characters.results;
-    },
-    charactersList(): ICharacterPreview[] {
-      return [...this.savedList, ...this.currentPageList];
-    },
-    nextPage(): number | null {
-      return this.characters.info.next || null;
-    },
-  },
-  methods: {
-    loadMore(): void {
-      this.savePageData(this.currentPageList);
-      this.changePage();
-    },
-    changePage(): void {
-      if (this.nextPage) {
-        this.page = this.nextPage;
-      }
-    },
-    savePageData(listData: Character[]): void {
-      if (listData && listData.length) {
-        this.savedList = [...this.savedList, ...listData];
-      }
-    },
   },
 });
 </script>
@@ -156,14 +103,6 @@ $tile-width: 360px;
         grid-column: 3 / span 2;
       }
     }
-  }
-
-  &__buttons {
-    padding: 20px 0;
-  }
-
-  &__btn {
-    cursor: pointer;
   }
 }
 </style>
