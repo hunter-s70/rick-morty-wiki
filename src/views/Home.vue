@@ -13,67 +13,47 @@
       />
     </div>
 
-    <div class="home__buttons">
-      <button class="home__btn" @click="loadMore">Load more</button>
-    </div>
+    <LoadMore v-if="pages" :page="page" :pages="pages" @click="loadMore" />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref } from "vue";
-
-import {
-  CharactersList,
-  ICharactersList,
-} from "@/models/characters-list.model";
-import { Character, ICharacterPreview } from "@/models/character.model";
-import { ListInfo } from "@/models/list-info.model";
+import { defineComponent, computed } from "vue";
+import { useResult } from "@vue/apollo-composable";
+import { usePagination } from "@/composables/usePagination";
 
 import { getCharactersList } from "@/api/characters.gql";
 import { getCharacters_characters_results } from "@/api/__generated__/getCharacters";
+
 import CharacterTile from "@/components/CharacterTile.vue";
+import LoadMore from "@/components/LoadMore.vue";
+
+type CharactersList = (getCharacters_characters_results | null)[];
 
 interface IHomeData {
-  savedList: Character[];
+  savedList: CharactersList;
 }
 
 export default defineComponent({
   name: "Home",
   components: {
     CharacterTile,
+    LoadMore,
   },
   setup() {
-    const page = ref(1);
+    const list = computed(() => characters.value?.results);
+    const info = computed(() => characters.value?.info || null);
+
+    const { page, pages, next, nextPage } = usePagination(info);
     const { result } = getCharactersList(page);
-
-    const getData = computed((): ICharactersList => {
-      const data = result.value?.characters;
-      const charactersInitialResult = data?.results || [];
-
-      // fill list info
-      const {
-        count = null,
-        pages = null,
-        next = null,
-        prev = null,
-      } = data?.info || {};
-      const finalListInfo = new ListInfo(count, pages, next, prev);
-
-      // fill list
-      const finalCharactersList = charactersInitialResult.map(
-        (item: getCharacters_characters_results | null): ICharacterPreview => {
-          const { id = null, name = null, image = null } = item || {};
-          return new Character(id, name, image);
-        }
-      );
-
-      return new CharactersList(finalListInfo, finalCharactersList);
-    });
+    const characters = useResult(result);
 
     return {
-      result,
       page,
-      characters: getData,
+      next,
+      pages,
+      nextPage,
+      list,
     };
   },
   data(): IHomeData {
@@ -82,27 +62,19 @@ export default defineComponent({
     };
   },
   computed: {
-    currentPageList(): ICharacterPreview[] {
-      return this.characters.results;
+    currentPageList(): CharactersList {
+      return this.list || [];
     },
-    charactersList(): ICharacterPreview[] {
+    charactersList(): CharactersList {
       return [...this.savedList, ...this.currentPageList];
-    },
-    nextPage(): number | null {
-      return this.characters.info.next || null;
     },
   },
   methods: {
     loadMore(): void {
       this.savePageData(this.currentPageList);
-      this.changePage();
+      this.nextPage();
     },
-    changePage(): void {
-      if (this.nextPage) {
-        this.page = this.nextPage;
-      }
-    },
-    savePageData(listData: Character[]): void {
+    savePageData(listData: CharactersList): void {
       if (listData && listData.length) {
         this.savedList = [...this.savedList, ...listData];
       }
@@ -156,14 +128,6 @@ $tile-width: 360px;
         grid-column: 3 / span 2;
       }
     }
-  }
-
-  &__buttons {
-    padding: 20px 0;
-  }
-
-  &__btn {
-    cursor: pointer;
   }
 }
 </style>
